@@ -8,10 +8,12 @@ import HomeScreen from "./screens/HomeScreen";
 import OnboardingScreen from "./screens/OnboardingScreen";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const Stack = createStackNavigator();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
+  //const [isFirstLaunch, setIsFirstLaunch] = useState(null);
 
   useEffect(() => {
     async function prepare() {
@@ -40,6 +42,41 @@ export default function App() {
     return null;
   }
 
+  // useEffect(() => {
+  //   AsyncStorage.getItem("alreadyLaunched", "true").then((value) => {
+  //     if (value == null) {
+  //       AsyncStorage.setItem("alreadyLaunched", "true"), setIsFirstLaunch(true);
+  //     } else {
+  //       setIsFirstLaunch(false);
+  //     }
+  //   });
+  // }, []);
+
+  // if (isFirstLaunch === null) {
+  //   return null;
+  // } else if (isFirstLaunch === true) {
+  //   return (
+  //     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+  //       <NavigationContainer>
+  //         <Stack.Navigator
+  //           screenOptions={{
+  //             headerShown: false,
+  //           }}
+  //         >
+  //           <Stack.Screen
+  //             name="OnboardingScreen"
+  //             component={OnboardingScreen}
+  //           />
+  //           <Stack.Screen name="LoginScreen" component={LoginScreen} />
+  //           <Stack.Screen name="HomeScreen" component={HomeScreen} />
+  //         </Stack.Navigator>
+  //       </NavigationContainer>
+  //     </View>
+  //   );
+  // } else {
+  //   return <LoginScreen />;
+  // }
+
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <NavigationContainer>
@@ -50,7 +87,7 @@ export default function App() {
         >
           <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
-          <Stack.Screen name="HomeScreen" component={OnboardingScreen} />
+          <Stack.Screen name="HomeScreen" component={HomeScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>
