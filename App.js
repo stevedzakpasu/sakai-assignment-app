@@ -8,6 +8,7 @@ import HomeScreen from "./screens/HomeScreen";
 import OnboardingScreen from "./screens/OnboardingScreen";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
+import AssignmentDetails from "./screens/AssignmentDetails";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const Stack = createStackNavigator();
 
@@ -88,6 +89,17 @@ export default function App() {
           <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          <Stack.Screen
+            name="Assignment Details"
+            component={AssignmentDetails}
+            options={{
+              headerShown: true,
+              headerTitleStyle: {
+                fontFamily: "regular",
+                fontSize: 35,
+              },
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </View>
