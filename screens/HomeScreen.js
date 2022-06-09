@@ -1,12 +1,18 @@
 import { StyleSheet, Text, View } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ActiveAssignments from "./ActiveAssignments";
 import OverdueAssignments from "./OverdueAssignments";
 import CompletedAssignments from "./CompletedAssignments";
+import { getUserID } from "../hooks/LocalStorage";
 const Tab = createMaterialTopTabNavigator();
 
 export default function HomeScreen() {
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    getUserID("username").then((response) => setUsername(response));
+  });
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <View
@@ -22,7 +28,7 @@ export default function HomeScreen() {
         <Text
           style={{ fontFamily: "regular", fontSize: 60, textAlign: "center" }}
         >
-          Hello, 10813865
+          Hello, {username}
         </Text>
       </View>
       <View style={{ flex: 1, margin: 25 }}>

@@ -1,6 +1,7 @@
 import { Image, Text, Pressable } from "react-native";
 import React from "react";
 import Onboarding from "react-native-onboarding-swiper";
+import { userStatus } from "../hooks/LocalStorage";
 
 const Done = ({ ...props }) => (
   <Pressable
@@ -22,7 +23,10 @@ const Done = ({ ...props }) => (
 
 const OnboardingScreen = ({ navigation }) => (
   <Onboarding
-    onDone={() => navigation.navigate("LoginScreen")}
+    onDone={() => {
+      navigation.navigate("LoginScreen");
+      userStatus("status", "old");
+    }}
     showSkip={false}
     showNext={false}
     bottomBarHighlight={false}

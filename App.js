@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StyleSheet, Text, View } from "react-native";
 import "react-native-gesture-handler";
 import LoginScreen from "./screens/LoginScreen";
@@ -9,12 +9,16 @@ import OnboardingScreen from "./screens/OnboardingScreen";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 import AssignmentDetails from "./screens/AssignmentDetails";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-const Stack = createStackNavigator();
+import { getUserStatus } from "./hooks/LocalStorage";
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
-  //const [isFirstLaunch, setIsFirstLaunch] = useState(null);
+  const [status, setStatus] = useState();
+
+  useEffect(() => {
+    getUserStatus("status").then((response) => setStatus(response));
+  }, []);
 
   useEffect(() => {
     async function prepare() {
@@ -43,41 +47,6 @@ export default function App() {
     return null;
   }
 
-  // useEffect(() => {
-  //   AsyncStorage.getItem("alreadyLaunched", "true").then((value) => {
-  //     if (value == null) {
-  //       AsyncStorage.setItem("alreadyLaunched", "true"), setIsFirstLaunch(true);
-  //     } else {
-  //       setIsFirstLaunch(false);
-  //     }
-  //   });
-  // }, []);
-
-  // if (isFirstLaunch === null) {
-  //   return null;
-  // } else if (isFirstLaunch === true) {
-  //   return (
-  //     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-  //       <NavigationContainer>
-  //         <Stack.Navigator
-  //           screenOptions={{
-  //             headerShown: false,
-  //           }}
-  //         >
-  //           <Stack.Screen
-  //             name="OnboardingScreen"
-  //             component={OnboardingScreen}
-  //           />
-  //           <Stack.Screen name="LoginScreen" component={LoginScreen} />
-  //           <Stack.Screen name="HomeScreen" component={HomeScreen} />
-  //         </Stack.Navigator>
-  //       </NavigationContainer>
-  //     </View>
-  //   );
-  // } else {
-  //   return <LoginScreen />;
-  // }
-
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <NavigationContainer>
@@ -86,7 +55,10 @@ export default function App() {
             headerShown: false,
           }}
         >
-          <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
+          {status != "old" ? (
+            <Stack.Screen name="Welcome" component={OnboardingScreen} />
+          ) : null}
+
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen
@@ -105,12 +77,3 @@ export default function App() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
