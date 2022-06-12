@@ -31,7 +31,7 @@ export default function HomeScreen() {
           Hello, {username}
         </Text>
       </View>
-      <View style={{ flex: 1, margin: 25 }}>
+      <View style={{ flex: 1, margin: 5 }}>
         <Tab.Navigator
           screenOptions={{
             tabBarActiveTintColor: "rgb(63,188,166)",

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Dimensions } from "react-native";
 import "react-native-gesture-handler";
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
@@ -10,6 +10,7 @@ import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 import AssignmentDetails from "./screens/AssignmentDetails";
 import { getUserStatus } from "./hooks/LocalStorage";
+const { height, width } = Dimensions.get("window");
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -68,7 +69,7 @@ export default function App() {
               headerShown: true,
               headerTitleStyle: {
                 fontFamily: "regular",
-                fontSize: 35,
+                fontSize: width * 0.06,
               },
             }}
           />

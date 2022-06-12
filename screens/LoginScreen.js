@@ -6,6 +6,7 @@ import {
   Pressable,
   Dimensions,
   Alert,
+  ScrollView,
 } from "react-native";
 import Constants from "expo-constants";
 import React from "react";
@@ -18,13 +19,17 @@ const { height, width } = Dimensions.get("window");
 export default function LoginScreen({ navigation }) {
   const [studentNumber, setStudentNumber] = React.useState("");
   const [studentPIN, setStudentPIN] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const Login = () => {
     userID("username", studentNumber);
     userPIN("pin", studentPIN);
   };
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ flex: 1, justifyContent: "space-evenly" }}
+    >
       <View
         style={{
           alignItems: "center",
@@ -105,25 +110,29 @@ export default function LoginScreen({ navigation }) {
           keyboardType="numeric"
           selectionColor={"black"}
           maxLength={5}
-          secureTextEntry={true}
+          secureTextEntry={!showPassword}
         />
         <Ionicons
-          name="eye-off"
+          name={showPassword ? "eye-off" : "eye"}
           size={width * 0.07}
           color="black"
           style={{ position: "absolute", right: width * 0.1 }}
+          onPress={() => {
+            setShowPassword(!showPassword);
+          }}
         />
       </View>
 
       <Pressable
         style={{
           backgroundColor: "#5590D2",
-          alignSelf: "center",
-          width: width * 0.9,
-          padding: width * 0.02,
+          justifyContent: "center",
+
+          width: "90%",
+          padding: width * 0.0001,
           borderRadius: 10,
           height: height * 0.06,
-          margin: height * 0.05,
+          margin: "5%",
         }}
         onPress={() => {
           Login();
@@ -162,7 +171,7 @@ export default function LoginScreen({ navigation }) {
           a database or in the application memory
         </Text>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -176,12 +185,13 @@ const styles = StyleSheet.create({
     fontFamily: "regular",
     color: "black",
     flex: 1,
-    height: height * 0.05,
+    height: height * 0.06,
     margin: height * 0.03,
     marginLeft: width * 0.13,
     borderRadius: 15,
-    padding: 10,
+    paddingLeft: 10,
     backgroundColor: "rgba(63,188,166,0.1)",
     alignSelf: "center",
+    flexGrow: 1,
   },
 });
