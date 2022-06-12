@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import ActiveAssignments from "./ActiveAssignments";
 import OverdueAssignments from "./OverdueAssignments";
 import CompletedAssignments from "./CompletedAssignments";
-import { getUserID } from "../hooks/LocalStorage";
+import { getUserID } from "../hooks/SecureLocalStorage";
 const Tab = createMaterialTopTabNavigator();
 
 export default function HomeScreen() {

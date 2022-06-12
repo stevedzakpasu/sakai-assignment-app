@@ -11,7 +11,7 @@ import Constants from "expo-constants";
 import React from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import { userID, userPIN } from "../hooks/LocalStorage";
+import { userID, userPIN } from "../hooks/SecureLocalStorage";
 
 const { height, width } = Dimensions.get("window");
 
