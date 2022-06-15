@@ -1,18 +1,25 @@
-import { Image, Text, Pressable } from "react-native";
+import { Image, Text, Pressable, Dimensions } from "react-native";
 import React from "react";
 import Onboarding from "react-native-onboarding-swiper";
 import { userStatus } from "../hooks/LocalStorage";
 
+const { height, width } = Dimensions.get("window");
+
 const Done = ({ ...props }) => (
   <Pressable
-    style={{ backgroundColor: "#5590D2", borderRadius: 25, margin: 10 }}
+    style={{
+      backgroundColor: "#5590D2",
+      borderRadius: 25,
+      padding: height * 0.005,
+      marginRight: width * 0.01,
+    }}
     {...props}
   >
     <Text
       style={{
         fontFamily: "regular",
-        fontSize: 24,
-        margin: 10,
+        fontSize: width * 0.05,
+        margin: height * 0.005,
         color: "white",
       }}
     >
@@ -31,8 +38,16 @@ const OnboardingScreen = ({ navigation }) => (
     showNext={false}
     bottomBarHighlight={false}
     DoneButtonComponent={Done}
-    titleStyles={{ color: "black", fontFamily: "regular" }}
-    subTitleStyles={{ color: "black", fontFamily: "regular", fontSize: 25 }}
+    titleStyles={{
+      color: "black",
+      fontFamily: "regular",
+      fontSize: width * 0.06,
+    }}
+    subTitleStyles={{
+      color: "black",
+      fontFamily: "regular",
+      fontSize: width * 0.06,
+    }}
     pages={[
       {
         backgroundColor: "#3FBCA6",

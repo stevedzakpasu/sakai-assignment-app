@@ -18,7 +18,7 @@ export default function AssignmentDetails({ route }) {
         backgroundColor: "white",
         padding: width * 0.03,
       }}
-      contentContainerStyle={{ flex: 1, justifyContent: "space-between" }}
+      contentContainerStyle={{ flexGrow: 1, justifyContent: "space-between" }}
     >
       <View>
         <Text
@@ -29,7 +29,7 @@ export default function AssignmentDetails({ route }) {
             alignSelf: "center",
           }}
         >
-          {route.params.CourseCode}
+          {/* {route.params.CourseCode} */}
         </Text>
       </View>
       <View>
@@ -49,7 +49,7 @@ export default function AssignmentDetails({ route }) {
             fontSize: width * 0.06,
           }}
         >
-          {route.params.AssignmentTitle}
+          {/* {route.params.AssignmentTitle} */}
         </Text>
       </View>
       <View
@@ -157,7 +157,7 @@ export default function AssignmentDetails({ route }) {
             fontWeight: "700",
           }}
         >
-          Resubmittion status
+          Resubmission status
         </Text>
         <Text style={{ fontFamily: "regular", fontSize: width * 0.06 }}>
           Allowed
@@ -187,6 +187,7 @@ export default function AssignmentDetails({ route }) {
             justifyContent: "space-between",
             padding: height * 0.015,
             borderRadius: 10,
+            margin: height * 0.04,
           }}
         >
           <Text

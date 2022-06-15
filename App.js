@@ -1,25 +1,37 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { View, Dimensions } from "react-native";
 import "react-native-gesture-handler";
+import * as SplashScreen from "expo-splash-screen";
+import * as Font from "expo-font";
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import OnboardingScreen from "./screens/OnboardingScreen";
-import * as SplashScreen from "expo-splash-screen";
-import * as Font from "expo-font";
 import AssignmentDetails from "./screens/AssignmentDetails";
-import { getUserStatus } from "./hooks/LocalStorage";
+
+import { getUserID, getUserPIN } from "./hooks/SecureLocalStorage";
+import { getUserStatus, getLoggedInStatus } from "./hooks/LocalStorage";
+import { UserContext } from "./contexts/UserContext";
+
 const { height, width } = Dimensions.get("window");
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
-  const [status, setStatus] = useState();
+  const [status, setStatus] = useState("");
+  const [authenticated, setAuthenticated] = useState("");
+  const [IDNumber, setIDNumber] = useState("");
+  const [PIN, setPIN] = useState("");
 
   useEffect(() => {
     getUserStatus("status").then((response) => setStatus(response));
-  }, []);
+    getUserID("username").then((response) => setIDNumber(response));
+    getUserPIN("pin").then((response) => setPIN(response));
+    getLoggedInStatus("loginstatus").then((response) =>
+      setAuthenticated(response)
+    );
+  });
 
   useEffect(() => {
     async function prepare() {
@@ -51,29 +63,53 @@ export default function App() {
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
+        <UserContext.Provider
+          value={{
+            status,
+            setStatus,
+            IDNumber,
+            setIDNumber,
+            PIN,
+            setPIN,
+            authenticated,
+            setAuthenticated,
           }}
         >
-          {status != "old" ? (
-            <Stack.Screen name="Welcome" component={OnboardingScreen} />
-          ) : null}
-
-          <Stack.Screen name="LoginScreen" component={LoginScreen} />
-          <Stack.Screen name="HomeScreen" component={HomeScreen} />
-          <Stack.Screen
-            name="Assignment Details"
-            component={AssignmentDetails}
-            options={{
-              headerShown: true,
-              headerTitleStyle: {
-                fontFamily: "regular",
-                fontSize: width * 0.06,
-              },
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
             }}
-          />
-        </Stack.Navigator>
+          >
+            {status !== "old" ? (
+              <Stack.Group>
+                <Stack.Screen
+                  name="OnboardingScreen"
+                  component={OnboardingScreen}
+                />
+                <Stack.Screen name="LoginScreen" component={LoginScreen} />
+              </Stack.Group>
+            ) : (
+              <Stack.Group>
+                {authenticated != "in" ? (
+                  <Stack.Screen name="LoginScreen" component={LoginScreen} />
+                ) : null}
+
+                <Stack.Screen name="HomeScreen" component={HomeScreen} />
+                <Stack.Screen
+                  name="Assignment Details"
+                  component={AssignmentDetails}
+                  options={{
+                    headerShown: true,
+                    headerTitleStyle: {
+                      fontFamily: "regular",
+                      fontSize: width * 0.06,
+                    },
+                  }}
+                />
+              </Stack.Group>
+            )}
+          </Stack.Navigator>
+        </UserContext.Provider>
       </NavigationContainer>
     </View>
   );

@@ -5,30 +5,40 @@ import {
   TextInput,
   Pressable,
   Dimensions,
-  Alert,
   ScrollView,
+  Alert,
 } from "react-native";
-import Constants from "expo-constants";
-import React from "react";
+import React, { useState, useContext } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { userID, userPIN } from "../hooks/SecureLocalStorage";
+import { LoggedInStatus, getLoggedInStatus } from "../hooks/LocalStorage";
+import { UserContext } from "../contexts/UserContext";
+const SakaiAPI = require("sakai-api").default;
 
 const { height, width } = Dimensions.get("window");
 
 export default function LoginScreen({ navigation }) {
-  const [studentNumber, setStudentNumber] = React.useState("");
-  const [studentPIN, setStudentPIN] = React.useState("");
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const { IDNumber, PIN, setIDNumber, setPIN } = useContext(UserContext);
 
-  const Login = () => {
-    userID("username", studentNumber);
-    userPIN("pin", studentPIN);
-  };
+  async function login() {
+    const API = new SakaiAPI();
+    try {
+      await API.login({ username: IDNumber, password: PIN });
+
+      navigation.navigate("HomeScreen");
+      LoggedInStatus("loginstatus", "in");
+    } catch (e) {
+      Alert.alert("Error", "Please try again");
+      console.log(e);
+    }
+  }
+
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={{ flex: 1, justifyContent: "space-evenly" }}
+      contentContainerStyle={{ flexGrow: 1 }}
     >
       <View
         style={{
@@ -75,7 +85,11 @@ export default function LoginScreen({ navigation }) {
         />
         <TextInput
           style={styles.input}
-          onChangeText={(ID) => setStudentNumber(ID)}
+          onChangeText={(ID) => {
+            setIDNumber(ID);
+            userID("username", ID);
+          }}
+          // value={studentNumber}
           keyboardType="numeric"
           selectionColor={"black"}
           maxLength={8}
@@ -106,7 +120,10 @@ export default function LoginScreen({ navigation }) {
         />
         <TextInput
           style={styles.input}
-          onChangeText={(PIN) => setStudentPIN(PIN)}
+          onChangeText={(PINCode) => {
+            setPIN(PINCode);
+            userPIN("pin", PINCode);
+          }}
           keyboardType="numeric"
           selectionColor={"black"}
           maxLength={5}
@@ -135,8 +152,7 @@ export default function LoginScreen({ navigation }) {
           margin: "5%",
         }}
         onPress={() => {
-          Login();
-          navigation.navigate("HomeScreen");
+          login();
         }}
       >
         <Text
@@ -176,10 +192,6 @@ export default function LoginScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: Constants.statusBarHeight,
-  },
   input: {
     fontSize: height * 0.03,
     fontFamily: "regular",

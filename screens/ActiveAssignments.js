@@ -48,7 +48,8 @@ export default function ActiveAssignments({ navigation }) {
             borderRadius: 40,
             alignSelf: "flex-end",
           }}
-          onPress={() => navigation.navigate("Assignment Details", item)}
+          // onPress={() => navigation.navigate("Assignment Details", item)}
+          onPress={() => navigation.navigate("Assignment Details")}
         >
           <AntDesign name="arrowright" size={15} color="black" />
         </Pressable>
