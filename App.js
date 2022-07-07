@@ -11,7 +11,11 @@ import OnboardingScreen from "./screens/OnboardingScreen";
 import AssignmentDetails from "./screens/AssignmentDetails";
 
 import { getUserID, getUserPIN } from "./hooks/SecureLocalStorage";
-import { getUserStatus, getLoggedInStatus } from "./hooks/LocalStorage";
+import {
+  getUserStatus,
+  getLoggedInStatus,
+  getCompletedAssignments,
+} from "./hooks/LocalStorage";
 import { UserContext } from "./contexts/UserContext";
 
 const { height, width } = Dimensions.get("window");
@@ -23,6 +27,7 @@ export default function App() {
   const [authenticated, setAuthenticated] = useState("");
   const [IDNumber, setIDNumber] = useState("");
   const [PIN, setPIN] = useState("");
+  const [completed, setCompleted] = useState([]);
 
   useEffect(() => {
     getUserStatus("status").then((response) => setStatus(response));
@@ -31,6 +36,9 @@ export default function App() {
     getLoggedInStatus("loginstatus").then((response) =>
       setAuthenticated(response)
     );
+    // getCompletedAssignments("completed").then((response) =>
+    //   setCompleted(JSON.parse(response))
+    // );
   });
 
   useEffect(() => {
@@ -73,6 +81,8 @@ export default function App() {
             setPIN,
             authenticated,
             setAuthenticated,
+            completed,
+            setCompleted,
           }}
         >
           <Stack.Navigator

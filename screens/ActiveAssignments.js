@@ -1,20 +1,30 @@
 import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import AssignmentDetails from "./AssignmentDetails";
-import React from "react";
+import React, { useContext, useState } from "react";
+import { activeAssignments } from "../hooks/LocalStorage";
+const SakaiAPI = require("sakai-api").default;
 
 export default function ActiveAssignments({ navigation }) {
-  const DATA = [
-    {
-      id: "1",
-      CourseCode: "DCIT 313",
-      AssignmentTitle: "AI IN PRACTICE READING REPORT 1",
-    },
-  ];
+  const [data, setData] = useState([]);
+  const [semester, setSemester] = useState("S1-2122");
+
+  (async () => {
+    const API = new SakaiAPI();
+    let assignments = await API.getMyAssignment();
+    const raw_data = assignments.data.assignment_collection;
+    const filtered_data = raw_data.filter(
+      (element) =>
+        element.context.substring(11, 18) === semester &&
+        element.status === "OPEN"
+    );
+
+    setData(filtered_data);
+  })();
+
   const renderItem = ({ item }) => (
     <View style={styles.item}>
-      <Text style={styles.courseTitle}>{item.CourseCode}</Text>
-      <Text style={styles.assignmentTitle}>{item.AssignmentTitle}</Text>
+      <Text style={styles.courseTitle}>{item.context}</Text>
+      <Text style={styles.assignmentTitle}>{item.title}</Text>
 
       <View
         style={{
@@ -25,9 +35,9 @@ export default function ActiveAssignments({ navigation }) {
           marginTop: 20,
         }}
       >
-        <Pressable
+        <View
           style={{
-            backgroundColor: "white",
+            backgroundColor: "#95fbac",
             alignSelf: "flex-start",
             padding: 5,
             borderRadius: 20,
@@ -35,8 +45,11 @@ export default function ActiveAssignments({ navigation }) {
             marginTop: 20,
           }}
         >
-          <Text style={{ textAlign: "center" }}> OPEN</Text>
-        </Pressable>
+          <Text style={{ textAlign: "center", color: "blue" }}>
+            {" "}
+            {item.status}
+          </Text>
+        </View>
 
         <Pressable
           style={{
@@ -48,8 +61,7 @@ export default function ActiveAssignments({ navigation }) {
             borderRadius: 40,
             alignSelf: "flex-end",
           }}
-          // onPress={() => navigation.navigate("Assignment Details", item)}
-          onPress={() => navigation.navigate("Assignment Details")}
+          onPress={() => navigation.navigate("Assignment Details", item)}
         >
           <AntDesign name="arrowright" size={15} color="black" />
         </Pressable>
@@ -59,9 +71,9 @@ export default function ActiveAssignments({ navigation }) {
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <FlatList
-        data={DATA}
+        data={data}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.entityId}
         navigation={navigation}
       />
     </View>

@@ -31,5 +31,28 @@ const getLoggedInStatus = async (key) => {
     alert("Something may have gone wrong, please restart the app.");
   }
 };
+const completedAssignments = async (key, value) => {
+  try {
+    await AsyncStorage.setItem(key, value);
+  } catch (error) {
+    alert("Something may have gone wrong, please restart the app.");
+  }
+};
 
-export { userStatus, getUserStatus, LoggedInStatus, getLoggedInStatus };
+const getCompletedAssignments = async (key) => {
+  try {
+    let status = await AsyncStorage.getItem(key);
+    return status;
+  } catch (error) {
+    alert("Something may have gone wrong, please restart the app.");
+  }
+};
+
+export {
+  userStatus,
+  getUserStatus,
+  LoggedInStatus,
+  getLoggedInStatus,
+  completedAssignments,
+  getCompletedAssignments,
+};

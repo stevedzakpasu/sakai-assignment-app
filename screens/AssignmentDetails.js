@@ -7,10 +7,24 @@ import {
   View,
   Dimensions,
 } from "react-native";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { UserContext } from "../contexts/UserContext";
+import { completedAssignments } from "../hooks/LocalStorage";
 const { height, width } = Dimensions.get("window");
+
 export default function AssignmentDetails({ route }) {
+  const { completed, setCompleted } = useContext(UserContext);
+  const [checkboxState, setCheckboxState] = useState();
+
+  useEffect(() => {
+    if (completed.includes(route.params.entityId)) {
+      setCheckboxState(true);
+    } else {
+      setCheckboxState(false);
+    }
+  });
+
   return (
     <ScrollView
       style={{
@@ -29,7 +43,7 @@ export default function AssignmentDetails({ route }) {
             alignSelf: "center",
           }}
         >
-          {/* {route.params.CourseCode} */}
+          {route.params.context}
         </Text>
       </View>
       <View>
@@ -49,7 +63,7 @@ export default function AssignmentDetails({ route }) {
             fontSize: width * 0.06,
           }}
         >
-          {/* {route.params.AssignmentTitle} */}
+          {route.params.title}
         </Text>
       </View>
       <View
@@ -78,7 +92,7 @@ export default function AssignmentDetails({ route }) {
               fontFamily: "regular",
             }}
           >
-            May 12,2022
+            {route.params.openTimeString}
           </Text>
         </View>
 
@@ -92,14 +106,32 @@ export default function AssignmentDetails({ route }) {
             Status
           </Text>
 
-          <Text
-            style={{
-              fontSize: width * 0.06,
-              fontFamily: "regular",
-            }}
-          >
-            OPEN
-          </Text>
+          {route.params.status === "CLOSED" ? (
+            <Text
+              style={{
+                backgroundColor: "#ffb8b8",
+                fontSize: width * 0.04,
+                fontFamily: "regular",
+                color: "blue",
+                textAlign: "center",
+                alignSelf: "flex-start",
+                padding: 5,
+                borderRadius: 25,
+              }}
+            >
+              {route.params.status}
+            </Text>
+          ) : (
+            <Text
+              style={{
+                fontSize: width * 0.06,
+                fontFamily: "regular",
+                color: "red",
+              }}
+            >
+              {route.params.status}
+            </Text>
+          )}
         </View>
       </View>
       <View
@@ -114,7 +146,7 @@ export default function AssignmentDetails({ route }) {
             Due Date
           </Text>
           <Text style={{ fontSize: width * 0.06, fontFamily: "regular" }}>
-            May 12,2022
+            {route.params.dueTimeString}
           </Text>
         </View>
 
@@ -124,7 +156,7 @@ export default function AssignmentDetails({ route }) {
           </Text>
 
           <Text style={{ fontSize: width * 0.06, fontFamily: "regular" }}>
-            50.00
+            {route.params.maxGradePoint}
           </Text>
         </View>
       </View>
@@ -145,7 +177,7 @@ export default function AssignmentDetails({ route }) {
             fontSize: width * 0.05,
           }}
         >
-          ATTACHMENT_ONLY_ASSIGNMENT_SUBMISSION
+          {route.params.submissionType}
         </Text>
       </View>
       <View>
@@ -160,7 +192,7 @@ export default function AssignmentDetails({ route }) {
           Resubmission status
         </Text>
         <Text style={{ fontFamily: "regular", fontSize: width * 0.06 }}>
-          Allowed
+          {route.params.allowResubmission}
         </Text>
       </View>
       <View>
@@ -175,7 +207,7 @@ export default function AssignmentDetails({ route }) {
           Instructions
         </Text>
         <Text style={{ fontFamily: "regular", fontSize: width * 0.06 }}>
-          This assignment will be due on Friday
+          {route.params.instructions}
         </Text>
       </View>
       <View>
@@ -204,9 +236,18 @@ export default function AssignmentDetails({ route }) {
             size={width * 0.07}
             fillColor="#6C63FF"
             unfillColor="#FFFFFF"
+            isChecked={checkboxState}
             iconStyle={{ borderColor: "#6C63FF" }}
             textStyle={{ fontFamily: "regular" }}
-            onPress={(_isChecked) => {}}
+            disableBuiltInState
+            onPress={() => {
+              if (!completed.includes(route.params.entityId)) {
+                completed.push(route.params.entityId);
+              } else {
+                completed.pop(route.params.entityId);
+              }
+              setCheckboxState(!checkboxState);
+            }}
           />
         </View>
       </View>

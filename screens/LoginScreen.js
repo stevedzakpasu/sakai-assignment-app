@@ -26,12 +26,11 @@ export default function LoginScreen({ navigation }) {
     const API = new SakaiAPI();
     try {
       await API.login({ username: IDNumber, password: PIN });
-
-      navigation.navigate("HomeScreen");
       LoggedInStatus("loginstatus", "in");
+      navigation.navigate("HomeScreen");
     } catch (e) {
       Alert.alert("Error", "Please try again");
-      console.log(e);
+      // console.log(e);
     }
   }
 
