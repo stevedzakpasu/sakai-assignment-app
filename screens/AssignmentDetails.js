@@ -210,47 +210,8 @@ export default function AssignmentDetails({ route }) {
           {route.params.instructions}
         </Text>
       </View>
-      <View>
-        <View
-          style={{
-            borderColor: "#6C63FF",
-            borderWidth: 1,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            padding: height * 0.015,
-            borderRadius: 10,
-            margin: height * 0.04,
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "regular",
-              fontSize: width * 0.07,
-              color: "#6C63FF",
-            }}
-          >
-            Mark as complete
-          </Text>
 
-          <BouncyCheckbox
-            size={width * 0.07}
-            fillColor="#6C63FF"
-            unfillColor="#FFFFFF"
-            isChecked={checkboxState}
-            iconStyle={{ borderColor: "#6C63FF" }}
-            textStyle={{ fontFamily: "regular" }}
-            disableBuiltInState
-            onPress={() => {
-              if (!completed.includes(route.params.entityId)) {
-                completed.push(route.params.entityId);
-              } else {
-                completed.pop(route.params.entityId);
-              }
-              setCheckboxState(!checkboxState);
-            }}
-          />
-        </View>
-      </View>
+      <Text> Link to assignment</Text>
     </ScrollView>
   );
 }

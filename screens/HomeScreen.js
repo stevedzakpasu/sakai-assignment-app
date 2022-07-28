@@ -3,7 +3,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import React, { useContext, useEffect, useState } from "react";
 import ActiveAssignments from "./ActiveAssignments";
 import OverdueAssignments from "./OverdueAssignments";
-import CompletedAssignments from "./CompletedAssignments";
+
 // import { getUserID } from "../hooks/SecureLocalStorage";
 import { UserContext } from "../contexts/UserContext";
 const Tab = createMaterialTopTabNavigator();
@@ -54,8 +54,7 @@ export default function HomeScreen() {
           }}
         >
           <Tab.Screen name="Active" component={ActiveAssignments} />
-          <Tab.Screen name="Overdue" component={OverdueAssignments} />
-          <Tab.Screen name="Completed" component={CompletedAssignments} />
+          <Tab.Screen name="Recently Closed" component={OverdueAssignments} />
         </Tab.Navigator>
       </View>
     </View>

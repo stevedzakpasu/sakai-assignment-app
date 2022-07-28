@@ -6,7 +6,7 @@ const SakaiAPI = require("sakai-api").default;
 
 export default function ActiveAssignments({ navigation }) {
   const [data, setData] = useState([]);
-  const [semester, setSemester] = useState("S1-2122");
+  const [semester, setSemester] = useState("S2-2122");
 
   (async () => {
     const API = new SakaiAPI();
