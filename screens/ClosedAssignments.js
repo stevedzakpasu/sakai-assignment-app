@@ -1,14 +1,11 @@
 import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import React, { useContext, useState } from "react";
-import { UserContext } from "../contexts/UserContext";
-import { overdueAssignments } from "../hooks/LocalStorage";
+import React, { useState } from "react";
 const SakaiAPI = require("sakai-api").default;
 
-export default function OverdueAssignments({ navigation }) {
+export default function ClosedAssignments({ navigation }) {
   const [data, setData] = useState([]);
-  const [semester, setSemester] = useState("S1-2122");
-  const { completed, setCompleted } = useContext(UserContext);
+  const [semester, setSemester] = useState("S1-2223");
 
   (async () => {
     const API = new SakaiAPI();
@@ -17,8 +14,7 @@ export default function OverdueAssignments({ navigation }) {
     const filtered_data = raw_data.filter(
       (element) =>
         element.context.substring(11, 18) === semester &&
-        element.status === "CLOSED" &&
-        !completed.includes(element.entityId)
+        element.status === "CLOSED"
     );
 
     setData(filtered_data);

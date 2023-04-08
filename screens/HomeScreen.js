@@ -1,13 +1,11 @@
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { Text, View, Dimensions } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import React, { useContext, useEffect, useState } from "react";
 import ActiveAssignments from "./ActiveAssignments";
-import OverdueAssignments from "./OverdueAssignments";
-
-// import { getUserID } from "../hooks/SecureLocalStorage";
+import ClosedAssignments from "./ClosedAssignments";
 import { UserContext } from "../contexts/UserContext";
-const Tab = createMaterialTopTabNavigator();
 
+const Tab = createMaterialTopTabNavigator();
 const { height, width } = Dimensions.get("window");
 
 export default function HomeScreen() {
@@ -54,11 +52,9 @@ export default function HomeScreen() {
           }}
         >
           <Tab.Screen name="Active" component={ActiveAssignments} />
-          <Tab.Screen name="Recently Closed" component={OverdueAssignments} />
+          <Tab.Screen name="Recently Closed" component={ClosedAssignments} />
         </Tab.Navigator>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({});

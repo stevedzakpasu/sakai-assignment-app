@@ -1,12 +1,11 @@
 import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import React, { useContext, useState } from "react";
-import { activeAssignments } from "../hooks/LocalStorage";
+import React, { useState } from "react";
 const SakaiAPI = require("sakai-api").default;
 
 export default function ActiveAssignments({ navigation }) {
   const [data, setData] = useState([]);
-  const [semester, setSemester] = useState("S2-2122");
+  const [semester, setSemester] = useState("S1-2223");
 
   (async () => {
     const API = new SakaiAPI();

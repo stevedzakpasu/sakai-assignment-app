@@ -1,30 +1,8 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  ScrollView,
-  Pressable,
-  View,
-  Dimensions,
-} from "react-native";
-import React, { useContext, useEffect, useState } from "react";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { UserContext } from "../contexts/UserContext";
-import { completedAssignments } from "../hooks/LocalStorage";
+import { StyleSheet, Text, ScrollView, View, Dimensions } from "react-native";
+import React from "react";
 const { height, width } = Dimensions.get("window");
 
 export default function AssignmentDetails({ route }) {
-  const { completed, setCompleted } = useContext(UserContext);
-  const [checkboxState, setCheckboxState] = useState();
-
-  useEffect(() => {
-    if (completed.includes(route.params.entityId)) {
-      setCheckboxState(true);
-    } else {
-      setCheckboxState(false);
-    }
-  });
-
   return (
     <ScrollView
       style={{
@@ -195,12 +173,11 @@ export default function AssignmentDetails({ route }) {
           {route.params.allowResubmission}
         </Text>
       </View>
-      <View>
+      <View style={{ marginBottom: height * 0.025 }}>
         <Text
           style={{
             fontFamily: "regular",
             fontSize: width * 0.07,
-
             fontWeight: "700",
           }}
         >
@@ -210,8 +187,21 @@ export default function AssignmentDetails({ route }) {
           {route.params.instructions}
         </Text>
       </View>
+      <View style={{ marginBottom: height * 0.025 }}>
+        <Text
+          style={{
+            fontFamily: "regular",
+            fontSize: width * 0.07,
+            fontWeight: "700",
+          }}
+        >
+          Link to assignment
+        </Text>
 
-      <Text> Link to assignment</Text>
+        <Text style={{ fontFamily: "regular", fontSize: width * 0.06 }}>
+          Click Here To View on Sakai
+        </Text>
+      </View>
     </ScrollView>
   );
 }
