@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "591075073698",
+    "project_id": "sakai-assignment-app",
+    "storage_bucket": "sakai-assignment-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:591075073698:android:d55a182b1c6334cbb981fb",
+        "android_client_info": {
+          "package_name": "com.ug.sakaiapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "591075073698-e82p8utrdfmrtv3bqpgbeqptqg27e0ea.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr1EMW0iNiRVwY5MIlSNBCMLUTYvYX8ws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "591075073698-e82p8utrdfmrtv3bqpgbeqptqg27e0ea.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

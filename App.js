@@ -1,23 +1,19 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { View, Dimensions } from "react-native";
+import { View, Dimensions, Platform } from "react-native";
 import "react-native-gesture-handler";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
+import * as Notifications from "expo-notifications";
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import OnboardingScreen from "./screens/OnboardingScreen";
 import AssignmentDetails from "./screens/AssignmentDetails";
-
 import { getUserID, getUserPIN } from "./hooks/SecureLocalStorage";
-import {
-  getUserStatus,
-  getLoggedInStatus,
-  getCompletedAssignments,
-} from "./hooks/LocalStorage";
+import { getUserStatus, getLoggedInStatus } from "./hooks/LocalStorage";
 import { UserContext } from "./contexts/UserContext";
-
+import * as Device from "expo-device";
 const { height, width } = Dimensions.get("window");
 const Stack = createNativeStackNavigator();
 
@@ -27,7 +23,10 @@ export default function App() {
   const [authenticated, setAuthenticated] = useState("");
   const [IDNumber, setIDNumber] = useState("");
   const [PIN, setPIN] = useState("");
-  const [completed, setCompleted] = useState([]);
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
   useEffect(() => {
     getUserStatus("status").then((response) => setStatus(response));
@@ -36,10 +35,30 @@ export default function App() {
     getLoggedInStatus("loginstatus").then((response) =>
       setAuthenticated(response)
     );
-    // getCompletedAssignments("completed").then((response) =>
-    //   setCompleted(JSON.parse(response))
-    // );
-  });
+  }, []);
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) =>
+      setExpoPushToken(token)
+    );
+
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
 
   useEffect(() => {
     async function prepare() {
@@ -81,8 +100,6 @@ export default function App() {
             setPIN,
             authenticated,
             setAuthenticated,
-            completed,
-            setCompleted,
           }}
         >
           <Stack.Navigator
@@ -123,4 +140,52 @@ export default function App() {
       </NavigationContainer>
     </View>
   );
+}
+
+async function schedulePushNotification() {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "You've got mail! 📬",
+      body: "Here is the notification body",
+      data: { data: "goes here" },
+    },
+    trigger: { seconds: 2 },
+  });
+}
+
+async function registerForPushNotificationsAsync() {
+  let token;
+
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  if (Device.isDevice) {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+    token = (
+      await Notifications.getExpoPushTokenAsync({
+        projectId: "3392f7e2-4e80-46d6-a0ff-bff7e2ef6c79",
+      })
+    ).data;
+    console.log(token);
+  } else {
+    alert("Must use physical device for Push Notifications");
+  }
+
+  return token;
 }
