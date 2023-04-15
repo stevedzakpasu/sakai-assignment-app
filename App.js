@@ -17,6 +17,14 @@ import * as Device from "expo-device";
 const { height, width } = Dimensions.get("window");
 const Stack = createNativeStackNavigator();
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
   const [status, setStatus] = useState("");
@@ -38,9 +46,9 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token)
-    );
+    registerForPushNotificationsAsync().then((token) => {
+      setExpoPushToken(token);
+    });
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
@@ -114,6 +122,7 @@ export default function App() {
                   component={OnboardingScreen}
                 />
                 <Stack.Screen name="LoginScreen" component={LoginScreen} />
+                <Stack.Screen name="HomeScreen" component={HomeScreen} />
               </Stack.Group>
             ) : (
               <Stack.Group>
@@ -143,14 +152,19 @@ export default function App() {
 }
 
 async function schedulePushNotification() {
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: "You've got mail! 📬",
-      body: "Here is the notification body",
-      data: { data: "goes here" },
-    },
-    trigger: { seconds: 2 },
-  });
+  try {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Winter is coming!",
+      },
+      trigger: {
+        seconds: 5,
+      },
+    });
+    console.log("Notification scheduled successfully!");
+  } catch (error) {
+    console.log("Error scheduling notification:", error);
+  }
 }
 
 async function registerForPushNotificationsAsync() {
@@ -182,7 +196,9 @@ async function registerForPushNotificationsAsync() {
         projectId: "3392f7e2-4e80-46d6-a0ff-bff7e2ef6c79",
       })
     ).data;
+
     console.log(token);
+    schedulePushNotification();
   } else {
     alert("Must use physical device for Push Notifications");
   }
