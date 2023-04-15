@@ -123,6 +123,17 @@ export default function App() {
                 />
                 <Stack.Screen name="LoginScreen" component={LoginScreen} />
                 <Stack.Screen name="HomeScreen" component={HomeScreen} />
+                <Stack.Screen
+                  name="Assignment Details"
+                  component={AssignmentDetails}
+                  options={{
+                    headerShown: true,
+                    headerTitleStyle: {
+                      fontFamily: "regular",
+                      fontSize: width * 0.06,
+                    },
+                  }}
+                />
               </Stack.Group>
             ) : (
               <Stack.Group>
