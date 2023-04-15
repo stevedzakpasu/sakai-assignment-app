@@ -1,8 +1,55 @@
 import { StyleSheet, Text, ScrollView, View, Dimensions } from "react-native";
 import React from "react";
+import { format } from "date-fns";
 const { height, width } = Dimensions.get("window");
 
 export default function AssignmentDetails({ route }) {
+  function formatDate(inputDateString) {
+    const date = new Date(inputDateString);
+    const day = format(date, "d");
+    const month = format(date, "MMMM");
+    const year = format(date, "yyyy");
+    const hour = format(date, "h");
+    const minute = format(date, "mm");
+    const amPm = format(date, "a");
+    const outputString = `${day}${daySuffix(
+      day
+    )} ${month} ${year} at ${hour}:${minute}${amPm}`;
+
+    function daySuffix(day) {
+      if (day >= 11 && day <= 13) {
+        return "th";
+      }
+      switch (day % 10) {
+        case 1:
+          return "st";
+        case 2:
+          return "nd";
+        case 3:
+          return "rd";
+        default:
+          return "th";
+      }
+    }
+
+    return outputString;
+  }
+
+  function removeUnderscores(str) {
+    return str.replace(/_/g, " ");
+  }
+
+  function extractCourseCode(str) {
+    const regex = /^([A-Z]+)-(\d+)-\d+-[A-Z]\d+-\d+$/;
+    const match = regex.exec(str);
+    if (match) {
+      const courseCode = match[1] + " " + match[2];
+      return courseCode;
+    } else {
+      return null;
+    }
+  }
+
   return (
     <ScrollView
       style={{
@@ -21,7 +68,7 @@ export default function AssignmentDetails({ route }) {
             alignSelf: "center",
           }}
         >
-          {route.params.context}
+          {extractCourseCode(route.params.context)}
         </Text>
       </View>
       <View>
@@ -70,7 +117,7 @@ export default function AssignmentDetails({ route }) {
               fontFamily: "regular",
             }}
           >
-            {route.params.openTimeString}
+            {formatDate(route.params.openTimeString)}
           </Text>
         </View>
 
@@ -84,17 +131,15 @@ export default function AssignmentDetails({ route }) {
             Status
           </Text>
 
-          {route.params.status === "CLOSED" ? (
+          {route.params.status === "OPEN" ? (
             <Text
               style={{
-                backgroundColor: "#ffb8b8",
-                fontSize: width * 0.04,
+                // backgroundColor: "#ffb8b8",
+                fontSize: width * 0.06,
                 fontFamily: "regular",
-                color: "blue",
-                textAlign: "center",
-                alignSelf: "flex-start",
-                padding: 5,
-                borderRadius: 25,
+                color: "green",
+                // padding: 5,
+                // borderRadius: 25,
               }}
             >
               {route.params.status}
@@ -124,7 +169,7 @@ export default function AssignmentDetails({ route }) {
             Due Date
           </Text>
           <Text style={{ fontSize: width * 0.06, fontFamily: "regular" }}>
-            {route.params.dueTimeString}
+            {formatDate(route.params.dueTimeString)}
           </Text>
         </View>
 
@@ -138,7 +183,7 @@ export default function AssignmentDetails({ route }) {
           </Text>
         </View>
       </View>
-      <View style={{ marginBottom: height * 0.025 }}>
+      {/* <View style={{ marginBottom: height * 0.025 }}>
         <Text
           style={{
             fontFamily: "regular",
@@ -155,10 +200,10 @@ export default function AssignmentDetails({ route }) {
             fontSize: width * 0.05,
           }}
         >
-          {route.params.submissionType}
+          {removeUnderscores(route.params.submissionType)}
         </Text>
-      </View>
-      <View>
+      </View> */}
+      {/* <View>
         <Text
           style={{
             fontFamily: "regular",
@@ -172,7 +217,7 @@ export default function AssignmentDetails({ route }) {
         <Text style={{ fontFamily: "regular", fontSize: width * 0.06 }}>
           {route.params.allowResubmission}
         </Text>
-      </View>
+      </View> */}
       <View style={{ marginBottom: height * 0.025 }}>
         <Text
           style={{
@@ -183,8 +228,14 @@ export default function AssignmentDetails({ route }) {
         >
           Instructions
         </Text>
-        <Text style={{ fontFamily: "regular", fontSize: width * 0.06 }}>
-          {route.params.instructions}
+        <Text
+          style={{
+            fontFamily: "regular",
+
+            fontSize: width * 0.06,
+          }}
+        >
+          {route.params.instructions.replace(/(<([^>]+)>)/gi, "")}
         </Text>
       </View>
       <View style={{ marginBottom: height * 0.025 }}>

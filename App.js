@@ -166,13 +166,12 @@ async function schedulePushNotification() {
   try {
     await Notifications.scheduleNotificationAsync({
       content: {
-        title: "Winter is coming!",
+        title: "I am proud of myself!",
       },
       trigger: {
         seconds: 5,
       },
     });
-    console.log("Notification scheduled successfully!");
   } catch (error) {
     console.log("Error scheduling notification:", error);
   }
@@ -207,8 +206,6 @@ async function registerForPushNotificationsAsync() {
         projectId: "3392f7e2-4e80-46d6-a0ff-bff7e2ef6c79",
       })
     ).data;
-
-    console.log(token);
     schedulePushNotification();
   } else {
     alert("Must use physical device for Push Notifications");

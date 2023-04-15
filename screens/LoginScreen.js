@@ -30,7 +30,7 @@ export default function LoginScreen({ navigation }) {
       navigation.navigate("HomeScreen");
     } catch (e) {
       Alert.alert("Error", "Please try again");
-      // console.log(e);
+      console.log(e);
     }
   }
 
