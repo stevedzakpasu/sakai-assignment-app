@@ -2,14 +2,12 @@ import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import React, { useState, useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
-const SakaiAPI = require("sakai-api").default;
 
 export default function ClosedAssignments({ navigation }) {
   const [data, setData] = useState([]);
-  const { semester } = useContext(UserContext);
+  const { semester, API } = useContext(UserContext);
 
   (async () => {
-    const API = new SakaiAPI();
     let assignments = await API.getMyAssignment();
     const raw_data = assignments.data.assignment_collection;
     const filtered_data = raw_data.filter(

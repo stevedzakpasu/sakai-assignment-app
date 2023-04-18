@@ -36,6 +36,7 @@ export default function App() {
   const notificationListener = useRef();
   const responseListener = useRef();
   const [semester, setSemester] = useState("S1-2223");
+  const API = new SakaiAPI();
 
   useEffect(() => {
     getUserStatus("status").then((response) => setStatus(response));
@@ -48,7 +49,6 @@ export default function App() {
 
   useEffect(() => {
     async function Login() {
-      const API = new SakaiAPI();
       try {
         await API.login({ username: IDNumber, password: PIN });
       } catch (e) {
@@ -124,6 +124,7 @@ export default function App() {
             setAuthenticated,
             semester,
             setSemester,
+            API,
           }}
         >
           <Stack.Navigator

@@ -14,16 +14,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { userID, userPIN } from "../hooks/SecureLocalStorage";
 import { LoggedInStatus } from "../hooks/LocalStorage";
 import { UserContext } from "../contexts/UserContext";
-const SakaiAPI = require("sakai-api").default;
 
 const { height, width } = Dimensions.get("window");
 
 export default function LoginScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
-  const { IDNumber, PIN, setIDNumber, setPIN } = useContext(UserContext);
+  const { IDNumber, PIN, setIDNumber, setPIN, API } = useContext(UserContext);
 
-  async function login() {
-    const API = new SakaiAPI();
+  async function Login() {
     try {
       await API.login({ username: IDNumber, password: PIN });
       LoggedInStatus("loginstatus", "in");
@@ -151,7 +149,7 @@ export default function LoginScreen({ navigation }) {
           margin: "5%",
         }}
         onPress={() => {
-          login();
+          Login();
         }}
       >
         <Text
