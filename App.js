@@ -54,7 +54,9 @@ export default function App() {
         console.log(e);
       }
     }
-    Login();
+    if (status === "old") {
+      Login();
+    }
   }, []);
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
