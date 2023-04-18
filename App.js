@@ -35,6 +35,7 @@ export default function App() {
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
+  const [semester, setSemester] = useState("S1-2223");
 
   useEffect(() => {
     getUserStatus("status").then((response) => setStatus(response));
@@ -121,6 +122,8 @@ export default function App() {
             setPIN,
             authenticated,
             setAuthenticated,
+            semester,
+            setSemester,
           }}
         >
           <Stack.Navigator

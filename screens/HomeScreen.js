@@ -1,6 +1,6 @@
 import { Text, View, Dimensions } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import ActiveAssignments from "./ActiveAssignments";
 import ClosedAssignments from "./ClosedAssignments";
 import { UserContext } from "../contexts/UserContext";

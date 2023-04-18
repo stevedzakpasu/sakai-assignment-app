@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserContext } from "../contexts/UserContext";
 const SakaiAPI = require("sakai-api").default;
 
 export default function ClosedAssignments({ navigation }) {
   const [data, setData] = useState([]);
-  const [semester, setSemester] = useState("S1-2223");
+  const { semester } = useContext(UserContext);
 
   (async () => {
     const API = new SakaiAPI();
