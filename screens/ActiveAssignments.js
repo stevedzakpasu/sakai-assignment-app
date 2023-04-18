@@ -9,7 +9,9 @@ export default function ActiveAssignments({ navigation }) {
 
   (async () => {
     const API = new SakaiAPI();
+
     let assignments = await API.getMyAssignment();
+
     const raw_data = assignments.data.assignment_collection;
     const filtered_data = raw_data.filter(
       (element) =>
@@ -18,6 +20,8 @@ export default function ActiveAssignments({ navigation }) {
     );
 
     setData(filtered_data);
+
+    console.log(e);
   })();
 
   const renderItem = ({ item }) => (

@@ -12,7 +12,7 @@ import React, { useState, useContext } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { userID, userPIN } from "../hooks/SecureLocalStorage";
-import { LoggedInStatus, getLoggedInStatus } from "../hooks/LocalStorage";
+import { LoggedInStatus } from "../hooks/LocalStorage";
 import { UserContext } from "../contexts/UserContext";
 const SakaiAPI = require("sakai-api").default;
 

@@ -16,7 +16,7 @@ import { UserContext } from "./contexts/UserContext";
 import * as Device from "expo-device";
 const { height, width } = Dimensions.get("window");
 const Stack = createNativeStackNavigator();
-
+const SakaiAPI = require("sakai-api").default;
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -45,6 +45,17 @@ export default function App() {
     );
   }, []);
 
+  useEffect(() => {
+    async function Login() {
+      const API = new SakaiAPI();
+      try {
+        await API.login({ username: IDNumber, password: PIN });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    Login();
+  }, []);
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
       setExpoPushToken(token);
