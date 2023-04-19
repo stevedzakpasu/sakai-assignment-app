@@ -2,10 +2,31 @@ import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../contexts/UserContext";
-
+import * as Notifications from "expo-notifications";
 export default function ActiveAssignments({ navigation }) {
   const [data, setData] = useState([]);
   const { semester, assignmentsData } = useContext(UserContext);
+
+  useEffect(() => {
+    async function showNotifications() {
+      try {
+        for (let item of data) {
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              title: `You have a new assignment: ${item.context}, ${item.title}`,
+            },
+            trigger: {
+              seconds: 5,
+            },
+          });
+        }
+      } catch (error) {
+        console.log("Error showing notification:", error);
+      }
+    }
+
+    showNotifications();
+  }, [data]);
 
   useEffect(() => {
     async function filterOpenAssignments() {
@@ -16,7 +37,6 @@ export default function ActiveAssignments({ navigation }) {
       );
 
       setData(filtered_data);
-      console.log(data);
     }
     filterOpenAssignments();
   }, []);

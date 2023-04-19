@@ -16,7 +16,6 @@ export default function ClosedAssignments({ navigation }) {
       );
 
       setData(filtered_data);
-      console.log(data);
     }
     filterClosedAssignments();
   }, []);
