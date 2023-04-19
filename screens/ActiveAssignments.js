@@ -1,23 +1,25 @@
 import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../contexts/UserContext";
 
 export default function ActiveAssignments({ navigation }) {
   const [data, setData] = useState([]);
-  const { semester, API } = useContext(UserContext);
+  const { semester, assignmentsData } = useContext(UserContext);
 
-  (async () => {
-    let assignments = await API.getMyAssignment();
-    const raw_data = assignments.data.assignment_collection;
-    const filtered_data = raw_data.filter(
-      (element) =>
-        element.context.substring(11, 18) === semester &&
-        element.status === "OPEN"
-    );
+  useEffect(() => {
+    async function filterOpenAssignments() {
+      const filtered_data = assignmentsData.filter(
+        (element) =>
+          element.context.substring(11, 18) === semester &&
+          element.status === "OPEN"
+      );
 
-    setData(filtered_data);
-  })();
+      setData(filtered_data);
+      console.log(data);
+    }
+    filterOpenAssignments();
+  }, []);
 
   const renderItem = ({ item }) => (
     <View style={styles.item}>

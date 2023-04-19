@@ -37,6 +37,7 @@ export default function App() {
   const responseListener = useRef();
   const [semester, setSemester] = useState("S1-2223");
   const API = new SakaiAPI();
+  const [assignmentsData, setAssignmentsData] = useState([]);
 
   useEffect(() => {
     getUserStatus("status").then((response) => setStatus(response));
@@ -50,15 +51,28 @@ export default function App() {
   useEffect(() => {
     async function Login() {
       try {
-        await API.login({ username: IDNumber, password: PIN });
+        await API.login({ username: IDNumber, password: PIN }).then(
+          console.log("logged in")
+        );
       } catch (e) {
         console.log(e);
       }
     }
-    if (status === "old") {
-      Login();
-    }
+
+    Login();
   }, []);
+
+  useEffect(() => {
+    async function fetchAssignmentsData() {
+      let assignments = await API.getMyAssignment()
+        .then(console.log("fetched successfully"))
+        .catch((e) => console.log(e));
+      const raw_data = assignments.data.assignment_collection;
+      setAssignmentsData(raw_data);
+    }
+    fetchAssignmentsData();
+  }, []);
+
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
       setExpoPushToken(token);
@@ -125,6 +139,8 @@ export default function App() {
             semester,
             setSemester,
             API,
+            assignmentsData,
+            setAssignmentsData,
           }}
         >
           <Stack.Navigator
@@ -183,7 +199,7 @@ async function schedulePushNotification() {
   try {
     await Notifications.scheduleNotificationAsync({
       content: {
-        title: "I am proud of myself!",
+        title: "You have a new assignment!",
       },
       trigger: {
         seconds: 5,
